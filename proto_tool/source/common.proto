@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package com.yyt.zapptv;
+
+option java_multiple_files = false;
+option java_package = "com.yyt.zapptv.proto.model";
+option java_outer_classname = "CommonProtos";
+
+message CommonReq {
+  string appid = 1;     //应用唯一标识，如Android是包名，未来可能还有web、pc等
+  string uid = 2;       //用户唯一标识
+  string uuid = 3;      //设备唯一标识
+  int32 verCode = 4;    //app版本号
+  string verName = 5;   //app版本名称
+  int32 osVerCode = 6;  //系统版本号
+  string osVerName = 7; //系统版本名称
+  string hwBrand = 8;   //设备品牌，如Huawei
+  string hwModel = 9;   //设备型号，如AL100
+  string mac = 10;      //设备mac地址
+}
+
+message CommonResp {
+  int32 code = 1;
+  string message = 2;
+  string extra = 3;
+}
+

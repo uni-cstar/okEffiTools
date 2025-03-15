@@ -2,6 +2,7 @@
 
 注意：提示没有权限则先执行命令`chmod +x generate.sh`赋予执行权限再执行命令
 注意：脚本会使用protoc脚本，系统会禁止运行，在第一次运行脚本时会弹出阻止运行对话框，需要通过系统设置->安全性设置中点击仍要打开protoc（跟系统运行其他未知程序一样的流程）
+注意：如果protoc版本与工程依赖版本不匹配，可到网站https://github.com/protocolbuffers/protobuf 重新下载配置。
 
 # 1. 处理整个目录
 ```Bash
@@ -20,7 +21,5 @@
 # 指定绝对路径
 ./generate.sh -i /tmp/test.proto -o /tmp/out
 ```
-
-
 
 protobuf工具获取地址： https://github.com/protocolbuffers/protobuf/releases
