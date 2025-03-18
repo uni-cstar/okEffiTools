@@ -1,0 +1,165 @@
+syntax = "proto3";
+package video.api;
+
+// ================== 公共响应结构 ==================
+message Response {
+  int32 code = 1;    // 响应状态码：200=成功，其他=失败
+  string message = 2; // 响应描述信息
+  google.protobuf.Any data = 3; // 动态响应数据
+}
+
+// 基础视频块信息
+message BaseVideoInfo {
+  string video_id = 1;        // 视频id
+  string title = 2;           // 完整标题（包含季/集信息）
+  string poster_url = 3;      // 海报图URL
+}
+
+// 扩展视频块信息
+message ExtendedVideoInfo {
+  BaseVideoInfo base_info = 1;
+  CATEGORY category = 2;      // 类型（电影/剧集/综艺等）
+}
+
+// 板块信息
+message BlockInfo {
+  int32 block_id = 1;       // 栏目id
+  string block_name = 2;    // 名称（示例："热门综艺"）
+  repeated ExtendedVideoInfo video_list = 3; // 内容列表
+}
+
+// ================== 分类枚举 ==================
+enum CATEGORY {
+  FILM = 0;         // 电影
+  SERIES = 1;       // 电视剧
+  TV_SHOW = 2;      // 综艺节目
+  SPORT = 3;        // 体育赛事
+  ANIME = 4;        // 动画
+  DOCUMENTARY = 5;  // 纪录片
+
+  // 后面可能会扩展
+  OTHER = 99;       // 未分类内容
+}
+
+// ================== 首页响应结构 ==================
+message Home {
+  repeated ExtendedVideoInfo carousel_list = 1;  // 轮播图
+  repeated ExtendedVideoInfo rec_list = 2;       // 推荐列表（首次返回10条，后面通过接口拉取）
+  repeated ExtendedVideoInfo hot_list = 3;       // 热播榜（首次返回10条，后面通过接口拉取）
+  repeated ExtendedVideoInfo history_list = 4;   // 播放记录（首次返回10条，后面通过接口拉取）
+  repeated BlockInfo block_list = 5;         // 自定义板块(首次返回10条，后面通过接口拉取，前期按照视频分类填充)
+}
+
+// 根据block_id获取视频列表
+message RowVideoList {
+  repeated ExtendedVideoInfo video_list = 1;
+}
+
+// 获取我的推荐列表
+message RecList {
+  repeated BaseVideoInfo video_list = 1;
+}
+
+// 获取热播列表
+message HotList {
+  repeated BaseVideoInfo video_list = 1;
+}
+
+// 获取播放记录
+message PlayHistory {
+  message Record {
+    BaseVideoInfo base_info = 1;
+    int32 play_seek = 2;       // 播放位置(秒)
+  }
+  repeated PlayHistory history_list = 1;
+}
+
+// ================== 剧集主页响应结构 ==================
+message SeriesHome {
+  repeated ExtendedVideoInfo rec_list = 1;
+  repeated BlockInfo block_list = 2;
+}
+
+// ================== 电影主页响应结构 ==================
+message FilmHome {
+  repeated ExtendedVideoInfo rec_list = 1;
+  repeated BlockInfo block_list = 2;
+}
+
+// ================== 根据video_id获取视频详情响应结构 ==================
+message VideoDetail {
+  message Person {
+    string id = 1;   // 影人ID
+    string name = 2; // 名称
+  }
+
+  string video_id = 1;          // 视频唯一标识符
+  string title = 2;             // 完整标题（示例："流浪地球2 (2023)"）
+  string description = 3;       // 详细描述
+  CATEGORY category = 4;        // 内容分类
+  repeated string rating = 5;   // 分级标识（示例：["L+", "16+"]，"L/10/12/14/16/18"，按不同的分级体系可能有不同的分法）
+  int32 release_year = 6;       // 上映年份（示例：2023）
+  string region = 7;           // 制片国家/地区（示例："美国"）
+  repeated string genres = 8;   // 类型标签（示例：["科幻", "灾难"]）
+  repeated Person directors = 9;  // 导演列表
+  repeated Person actors = 10;    // 主演列表
+  string poster_url = 11;         // 海报图
+  string bg_poster_url = 12;      // 背景海报图
+  int32 duration = 13;            // 时长（秒，电影时使用）
+  int32 total_episodes = 14;      // 总集数
+}
+
+// 根据video_id获取推荐信息
+message VideoList {
+  repeated VideoInfo rec_list = 1; // 推荐列表（默认返10条）
+}
+
+// ================== 根据video_id获取剧集列表响应结构 ==================
+message EpisodeList {
+  message Episode {
+    string episode_id = 1;   // 单集ID
+    string title = 2;        // 标题
+    string poster_url = 3;   // 封面
+    int32 duration = 4;      // 时长（秒级时间戳）
+    int32 num = 5;           // 集号
+  }
+
+  repeated Episode episodes = 1; // 按顺序排列的剧集列表
+}
+
+// 我的清单
+message MyCollection {
+  repeated BaseVideoInfo video_list = 1;
+}
+
+// ================== 播放信息结构 ==================
+message PlaybackInfo {
+  message SubtitleTrack {
+    string label = 1;    // 显示标签（示例："简体中文"）
+    string format = 2;    // 字幕格式（枚举：vtt/ass/srt）
+    string url = 3;       // 字幕文件地址
+  }
+
+  message AudioTrack {
+    string label = 1;     // 显示标签（示例："中文配音"）
+    string codec = 2;     // 音频编码（枚举：AAC/AC3/DTS）
+    string url = 3;       // 音轨文件地址
+  }
+
+  string play_url = 1;                  // HLS主播放地址
+  repeated SubtitleTrack subtitles = 2; // 可用字幕列表
+  repeated AudioTrack audio_tracks = 3; // 可用音轨列表
+}
+
+// ================== 升级信息 ==================
+message Upgrade {
+  int32 mode = 1;        // 升级模式：1=推荐升级，2=强制升级
+  int32 version_id = 2;  // 新版本ID
+  string version_name = 3;  // 版本名称（示例："v2.1.0"）
+  string title = 4;      // 更新标题（示例："发现新版本"）
+  string content = 5;    // 更新内容（支持Markdown格式）
+  string apk_url = 6;    // 安装包下载地址
+  string apk_md5 = 7;    // 安装包MD5校验值
+}
+
+// todo 反馈二维码、隐私协议、用户协议

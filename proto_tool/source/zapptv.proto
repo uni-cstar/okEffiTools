@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package com.yyt.zapptv;
+
+option java_multiple_files = false;
+option java_package = "com.yyt.zapptv.proto.model";
+option java_outer_classname = "CommonProtos";
+
+// ================== 分类枚举 ==================
+enum CATEGORY {
+  FILM = 0;         // 电影
+  SERIES = 1;       // 电视剧
+  TV_SHOW = 2;      // 综艺节目
+  SPORT = 3;        // 体育赛事
+  ANIME = 4;        // 动画
+  DOCUMENTARY = 5;  // 纪录片
+
+  // 后面可能会扩展
+  OTHER = 99;       // 未分类内容
+}
+
+//通用请求体
+message CommonReq {
+  string appid = 1;     //应用唯一标识，如Android是包名，未来可能还有web、pc等
+  string uid = 2;       //用户唯一标识
+  string uuid = 3;      //设备唯一标识
+  int32 verCode = 4;    //app版本号
+  string verName = 5;   //app版本名称
+  int32 osVerCode = 6;  //系统版本号
+  string osVerName = 7; //系统版本名称
+  string hwBrand = 8;   //设备品牌，如Huawei
+  string hwModel = 9;   //设备型号，如AL100
+  string mac = 10;      //设备mac地址
+}
+
+//通用响应体
+message CommonResp {
+  int32 code = 1;
+  string message = 2;
+  string extra = 3;
+}
+
+// 基础视频块信息
+message BaseVideoInfo {
+  string video_id = 1;        // 视频id
+  string title = 2;           // 完整标题（包含季/集信息）
+  string poster_url = 3;      // 海报图URL
+}
+
+// 扩展视频块信息 ：即视频块信息 + 分类信息
+message ExtendedVideoInfo {
+  BaseVideoInfo base_info = 1;
+  CATEGORY category = 2;      // 类型（电影/剧集/综艺等）
+}
+
+// 板块信息 ： 即一个视频行
+message BlockInfo {
+  int32 block_id = 1;       // 栏目id
+  string block_name = 2;    // 名称（示例："热门综艺"）
+  repeated ExtendedVideoInfo video_list = 3; // 内容列表
+}
+
+// ================== 首页响应结构 ==================
+message Home {
+  repeated ExtendedVideoInfo carousel_list = 1;  // 轮播图
+  repeated ExtendedVideoInfo rec_list = 2;       // 推荐列表（首次返回10条，后面通过接口拉取）
+  repeated ExtendedVideoInfo hot_list = 3;       // 热播榜（首次返回10条，后面通过接口拉取）
+  repeated ExtendedVideoInfo history_list = 4;   // 播放记录（首次返回10条，后面通过接口拉取）
+  repeated BlockInfo block_list = 5;         // 自定义板块(首次返回10条，后面通过接口拉取，前期按照视频分类填充)
+}
+
+// ================== 剧集主页响应结构 ==================
+message SeriesHome {
+  repeated ExtendedVideoInfo rec_list = 1;
+  repeated BlockInfo block_list = 2;
+}
+
+// ================== 电影主页响应结构 ==================
+message FilmHome {
+  repeated ExtendedVideoInfo rec_list = 1;
+  repeated BlockInfo block_list = 2;
+}
