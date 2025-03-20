@@ -1,3 +1,0 @@
-// source/error.proto（故意制造错误）
-syntax = "proto3";
-message Test { string name = 1 }  # 缺少分号
