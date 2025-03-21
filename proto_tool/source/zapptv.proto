@@ -47,18 +47,18 @@ message ResInfo {
   string title = 2;          // 完整标题
   string description = 3;    // 详细描述
   CATEGORY category = 4;     // 分类
-  repeated string rating = 5;// 分级标识
+  string rating = 5;// 分级标识
   int32 releaseYear = 6;    // 上映年份
   string region = 7;         // 制片地区
   repeated string genres = 8;// 类型标签
-  repeated string directors = 9;  // 导演列表（多个用","隔开）
-  repeated string actors = 10;    // 演员列表（多个用","隔开）
+  repeated string directors = 9;  // 导演列表
+  repeated string actors = 10;    // 演员列表
   string posterUrl = 11;    // 海报URL
   string bgPosterUrl = 12; // 背景海报
   int64 duration = 13;       // 时长（秒）
   int32 totalEpisodes = 14; // 总集数
-
-  reserved 15 to 20; // 保留用于未来扩展
+  string extraTag = 15; // 附带的说明标签（用于顶部右侧的说明）
+  reserved 16 to 20; // 保留用于未来扩展
 }
 
 // ================== 资源详情 ==================
@@ -86,16 +86,6 @@ message Home {
 // ================== 电影 & 剧集页响应结构 ==================
 message ResBlock {
   repeated ResRow resRows = 1; // 资源列表
-}
-
-// ================== 资源详情请求 ==================
-message ResDetailReq {
-  string resId = 1; // 资源ID
-}
-
-// ================== 相关资源请求 ==================
-message ResRelateReq {
-  string resId = 1; // 资源ID
 }
 
 // ================== 资源推荐 ==================
