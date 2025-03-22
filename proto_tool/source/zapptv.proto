@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package com.yyt.zapptv;
-
+import "google/protobuf/any.proto";
 option java_multiple_files = true;
 option java_package = "com.yyt.zapptv.model.proto";
 option java_outer_classname = "Protos";
@@ -115,6 +115,15 @@ message PlayHistories {
 message Watchlists {
   repeated ResLiteInfo watchlists = 1; // 清单列表
 }
+
+message PageResult{
+  repeated google.protobuf.Any items = 1;
+  int32 page = 2;   //
+  int32 pageSize = 3;   //
+  int32 totalPages = 4;   //
+  int32 total = 5;   //
+}
+
 
 // ================== 播放信息 ==================
 
