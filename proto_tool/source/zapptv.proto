@@ -58,7 +58,7 @@ message ResInfo {
   int64 duration = 13;       // 时长（秒）
   int32 totalEpisodes = 14; // 总集数
   string extraTag = 15; // 附带的说明标签（用于顶部右侧的说明）
-  reserved 16 to 20; // 保留用于未来扩展
+  bool inWatchlist = 16; // 是否已加入清单
 }
 
 // ================== 资源详情 ==================
@@ -77,10 +77,44 @@ message ResRow {
   repeated ResInfo resInfos = 6; // 资源列表
 }
 
+// ================== 搜索词 ==================
+message SearchTerm {
+  string id = 1;      // 搜索词ID
+  string keyword = 2; // 搜索关键词
+  int64 timestamp = 3; // 搜索时间戳
+}
+// ================== 搜索历史 ==================
+message SearchHistory {
+  repeated SearchTerm history = 1; // 历史搜索记录
+}
+// ================== 搜索热词 ==================
+message HotSearchTerms {
+  message HotTerm {
+    string id = 1;       // 热词ID
+    string keyword = 2;  // 热词关键词
+    int32 rank = 3;      // 排名
+  }
+  repeated HotTerm terms = 1;   // 热搜列表
+  int64 updateTime = 2;         // 更新时间戳
+}
+// ================== 搜索结果 ==================
+message SearchResults {
+  string keyword = 1;                   // 搜索关键词
+  repeated ResLiteInfo results = 2;     // 搜索结果
+  int32 index = 3;                      // 当前页码
+  int32 count = 4;                      // 每页数量
+}
+// ================== 热门搜索 ==================
+message SearchHots {
+  repeated ResLiteInfo hots = 1;     // 搜索结果
+  int32 index = 2;                   // 当前页码
+  int32 count = 3;                   // 每页数量
+}
+
 // ================== 首页响应 ==================
 message Home {
-  repeated ResLiteInfo carousels = 1; // 轮播图
-  repeated ResLiteRow resRows = 2;  // 资源列表
+  repeated ResLiteInfo carousels = 1;   // 轮播图
+  repeated ResLiteRow resRows = 2;      // 资源列表
 }
 
 // ================== 电影 & 剧集页响应结构 ==================
