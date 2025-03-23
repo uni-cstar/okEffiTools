@@ -24,6 +24,12 @@ message Response {
   bytes data = 3;     // 动态数据
 }
 
+// ================== 公共分页响应结构 ==================
+message Page {
+  int32 startIndex = 1; // 起始索引
+  int32 count = 2;      // 应填充数据量
+}
+
 // ================== 轻量级资源信息 ==================
 message ResLiteInfo {
   string resId = 1;  // 资源ID
@@ -99,16 +105,14 @@ message HotSearchTerms {
 }
 // ================== 搜索结果 ==================
 message SearchResults {
-  string keyword = 1;                   // 搜索关键词
-  repeated ResLiteInfo results = 2;     // 搜索结果
-  int32 index = 3;                      // 当前页码
-  int32 count = 4;                      // 每页数量
+  string keyword = 1; // 搜索关键词
+  Page page = 2;      // 分页
+  repeated ResLiteInfo results = 3;     // 搜索结果
 }
 // ================== 热门搜索 ==================
 message SearchHots {
-  repeated ResLiteInfo hots = 1;     // 搜索结果
-  int32 index = 2;                   // 当前页码
-  int32 count = 3;                   // 每页数量
+  repeated ResLiteInfo hots = 1; // 搜索结果
+  Page page = 2;                 // 分页
 }
 
 // ================== 首页响应 ==================
@@ -139,25 +143,18 @@ message Episodes {
 // ================== 播放历史 ==================
 message PlayHistories {
   message PlayHistory {
-    ResLiteInfo baseInfo = 1; // 资源信息
-    int64 playSeek = 2;       // 播放位置（秒）
+    ResLiteInfo base_info = 1; // 资源信息
+    int64 playSeek = 2;                  // 播放位置（秒）
   }
   repeated PlayHistory histories = 1;
+  Page page = 2;                        // 分页
 }
 
 // ================== 我的清单 ==================
 message Watchlists {
   repeated ResLiteInfo watchlists = 1; // 清单列表
+  Page page = 2;                                 // 分页
 }
-
-message PageResult{
-  repeated google.protobuf.Any items = 1;
-  int32 page = 2;   //
-  int32 pageSize = 3;   //
-  int32 totalPages = 4;   //
-  int32 total = 5;   //
-}
-
 
 // ================== 播放信息 ==================
 
