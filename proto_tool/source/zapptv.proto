@@ -185,3 +185,21 @@ message Upgrade {
   string apkUrl = 6;    // 安装包地址
   string apkMd5 = 7;    // MD5校验
 }
+
+// ================== 系统设置相关信息 ==================
+
+// 隐私协议
+message AboutInfo {
+  PrivacyPolicy privacy_policy = 1;  // 隐私协议
+}
+
+// 隐私协议
+message PrivacyPolicy {
+  string title = 1;     // 隐私协议标题
+  string content = 2;   // 隐私协议内容
+}
+
+// 用户反馈信息
+message FeedbackInfo {
+  string qrcode_url = 1;  // 用户反馈二维码URL
+}
