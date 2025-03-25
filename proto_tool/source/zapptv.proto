@@ -203,3 +203,9 @@ message PrivacyPolicy {
 message FeedbackInfo {
   string qrcode_url = 1;  // 用户反馈二维码URL
 }
+
+// ================== 搜索建议 ==================
+message SearchSuggestions {
+  repeated string suggestions = 1; // 搜索建议列表
+  string keyword = 2;              // 搜索关键词
+}
