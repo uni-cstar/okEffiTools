@@ -165,14 +165,22 @@ message Playback {
     string format = 2; // 格式：vtt/ass/srt
     string url = 3;    // 文件地址
   }
+
   message AudioTrack {
     string label = 1;  // 音轨标签
     string codec = 2;  // 编码：AAC/AC3/DTS
     string url = 3;    // 文件地址
   }
+
   string playUrl = 1;              // 播放地址
   repeated SubtitleTrack subtitles = 2; // 字幕列表
   repeated AudioTrack audioTracks = 3; // 音轨列表
+  message Episode {
+    ResLiteInfo baseInfo = 1; // 资源信息
+    int32 num = 2;             // 集号
+  }
+  string episode = 4; // 对应的剧集信息
+  int32 playSeek = 5; // 播放位置（秒）
 }
 
 // ================== 升级信息 ==================
@@ -208,4 +216,9 @@ message FeedbackInfo {
 message SearchSuggestions {
   repeated string suggestions = 1; // 搜索建议列表
   string keyword = 2;              // 搜索关键词
+}
+
+message WatchlistResult {
+  bool success = 1; // 成功:true, 失败: false
+  string message = 2;  // toast信息
 }
